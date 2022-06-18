@@ -21,6 +21,7 @@ type Frontend struct {
 	authenticationSASL              AuthenticationSASL
 	authenticationSASLContinue      AuthenticationSASLContinue
 	authenticationSASLFinal         AuthenticationSASLFinal
+	authenticationSM3Password       AuthenticationSM3Password
 	backendKeyData                  BackendKeyData
 	bindComplete                    BindComplete
 	closeComplete                   CloseComplete
@@ -162,6 +163,7 @@ const (
 	AuthTypeSASL              = 10
 	AuthTypeSASLContinue      = 11
 	AuthTypeSASLFinal         = 12
+	AuthTypeSM3Password       = 13
 )
 
 func (f *Frontend) findAuthenticationMessageType(src []byte) (BackendMessage, error) {
@@ -191,6 +193,8 @@ func (f *Frontend) findAuthenticationMessageType(src []byte) (BackendMessage, er
 		return &f.authenticationSASLContinue, nil
 	case AuthTypeSASLFinal:
 		return &f.authenticationSASLFinal, nil
+	case AuthTypeSM3Password:
+		return &f.authenticationSM3Password, nil
 	default:
 		return nil, fmt.Errorf("unknown authentication type: %d", f.authType)
 	}
